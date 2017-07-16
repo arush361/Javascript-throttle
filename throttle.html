@@ -1,0 +1,82 @@
+<!-- Author: Arush-->
+<html>
+    <head>
+        <style>
+
+            section {
+                text-align: center;
+                width:100%;
+                height: 100%;
+                margin: 0px;
+                padding: 0px;
+            }
+            .message {
+                height : 10rem;
+                width: 10rem;
+                font-size: 10rem;
+                width: 100%;
+                text-align: center;
+                font-style: sans-serif;
+            }
+
+            #click-button {
+                height: 2rem;
+                width: 5rem;
+            }
+            #click-button:hover {
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <section>
+            <div class = "message">0</div>
+            <button id = "click-button">Go</button>
+        </section>
+        <script>
+            ;(function(d, w) {
+                'use strict'
+                var Objects = {};
+
+            var Functions = {
+                /**
+                * Handles the request and exexcutes them on a given time constraint
+                *
+                * @param { Function } fun - the function to execute
+                * @param { Number } time - the time 
+                */
+                HandleRequest : function(fun, time) {
+                    var lastTime,  // for storing lastTime fun was called
+                        timerID; // id returned by the timer 
+                    function handler() {
+                        var that = this;  // preserver this context here
+                        var currentTime = Number(new Date);
+                        if(lastTime && currentTime < lastTime + time) {
+                            clearTimeout(timerID);
+                            timerID = setTimeout(function() {
+                                lastTime = currentTime;
+                                fun();
+                            }, time);
+                        }
+                        else {
+                            lastTime = currentTime;
+                            fun();
+                        }
+                        
+                    }
+                    return handler;
+                }
+            }
+                d.addEventListener('DOMContentLoaded', function() {
+                    Objects.ClickButton = d.getElementById('click-button');
+                    Objects.Message = d.getElementsByClassName('message');
+                    Objects.ClickButton.addEventListener('click', Functions.HandleRequest(function () { 
+                        console.log('called');
+                        Objects.Message[0].innerHTML = Number(Objects.Message[0].innerHTML) + 1;
+                    }, 5000));
+                });
+            })(document, window);
+        </script>
+    </body>
+</html>
+
